@@ -1,29 +1,234 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Limux Technologies</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edwinhomie App</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #1769d2;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: white;
+      width: 100%;
+      max-width: 450px;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #1769d2;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #1769d2;
+      box-shadow: 0 0 4px #1769d2;
+    }
+
+    .gender {
+      display: flex;
+      gap: 25px;
+      margin: 10px 0;
+    }
+
+    .gender label {
+      font-weight: normal;
+      margin: 0;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    button {
+      flex: 1;
+      padding: 13px;
+      border: none;
+      border-radius: 7px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .apply {
+      background: #1769d2;
+    }
+
+    .submit {
+      background: #0e9f6e;
+    }
+
+    button:hover {
+      opacity: 0.88;
+    }
+
+    #message {
+      margin-top: 18px;
+      text-align: center;
+      font-weight: bold;
+      color: #1769d2;
+      overflow-wrap: anywhere;
+    }
+
+    .footer {
+      text-align: center;
+      color: #777;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
-<body style="background-color:skyblue;">
 
-<h1>Limux Technologies</h1>
+<body>
+  <div class="container">
+    <h1>Edwinhomie</h1>
+    <p class="subtitle">Application Form</p>
 
-<h2>About Us</h2>
+    <form id="applicationForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name"
+             placeholder="Enter your full name" required>
 
-<form action="save.php" method="POST">
-    <label>Name:</label>
-    <input type="text" name="name" required><br><br>
+      <label for="reg">Registration Number</label>
+      <input type="text" id="reg"
+             placeholder="Enter registration number" required>
 
-    <label>Email:</label>
-    <input type="email" name="email" required><br><br>
+      <label for="city">City</label>
+      <input type="text" id="city"
+             placeholder="Enter your city" required>
 
-    <label>Mobile:</label>
-    <input type="text" name="mobile" required><br><br>
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone"
+             placeholder="Enter phone number"
+             pattern="[+]?[0-9 ]{7,15}" required>
 
-    <label>City:</label>
-    <input type="text" name="city" required><br><br>
+      <label>Gender</label>
+      <div class="gender">
+        <label>
+          <input type="radio" name="gender"
+                 value="Male" required> Male
+        </label>
+        <label>
+          <input type="radio" name="gender"
+                 value="Female"> Female
+        </label>
+      </div>
 
-    <input type="submit" value="Send Data">
-</form>
+      <div class="buttons">
+        <button type="button" class="apply"
+                onclick="applyNow()">
+          Apply
+        </button>
 
+        <button type="submit" class="submit">
+          Submit
+        </button>
+      </div>
+    </form>
+
+    <div id="message" role="status"></div>
+
+    <div class="footer">
+      Edwinhomie Application System
+    </div>
+  </div>
+
+  <script>
+    // Apply function
+    function applyNow() {
+      const name = document.getElementById("name").value.trim();
+
+      if (!name) {
+        document.getElementById("message").textContent =
+          "Please enter your name to start.";
+        document.getElementById("name").focus();
+        return;
+      }
+
+      document.getElementById("message").textContent =
+        "Welcome " + name + "! Please complete your application.";
+    }
+
+    // Submit function
+    document.getElementById("applicationForm")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const reg = document.getElementById("reg").value.trim();
+        const city = document.getElementById("city").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const gender = document.querySelector(
+          'input[name="gender"]:checked'
+        );
+
+        if (!gender) {
+          document.getElementById("message").textContent =
+            "Please select your gender.";
+          return;
+        }
+
+        const application = {
+          name: name,
+          registrationNumber: reg,
+          city: city,
+          phone: phone,
+          gender: gender.value
+        };
+
+        // Display application confirmation
+        document.getElementById("message").textContent =
+          "Application submitted successfully! " +
+          "Name: " + application.name +
+          " | Registration: " + application.registrationNumber;
+
+        console.log("Application:", application);
+
+        // Reset form after successful submission
+        this.reset();
+      });
+  </script>
 </body>
 </html>
+
